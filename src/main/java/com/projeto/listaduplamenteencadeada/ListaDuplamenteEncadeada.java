@@ -5,26 +5,15 @@ public class ListaDuplamenteEncadeada<T> {
     private NoDuplo<T> primeiroNo;
     private NoDuplo<T> ultimoNo;
 
-    private int tamanhoLista;
-
-    public ListaDuplamenteEncadeada(){
-        this.primeiroNo = null;
-        this.ultimoNo = null;
-        this.tamanhoLista = 0;
-    }
-
-    public T get(int index){
-        return this.getNo(index).getConteudo();
-    }
+    private int tamanhoLista = 0;
 
     public void add(T elemento){
-        NoDuplo<T> novoNo = new NoDuplo<>(elemento);
+        NoDuplo<T> novoNo = new NoDuplo<T>(elemento);
         novoNo.setNoProximo(null);
-        novoNo.setNoProximo(ultimoNo);
+        novoNo.setNoPrevio(ultimoNo);
         if(primeiroNo == null){
             primeiroNo = novoNo;
         }
-
         if(ultimoNo != null){
             ultimoNo.setNoProximo(novoNo);
         }
@@ -40,19 +29,16 @@ public class ListaDuplamenteEncadeada<T> {
         if(novoNo.getNoProximo() != null){
             novoNo.setNoPrevio(noAuxiliar.getNoPrevio());
             novoNo.getNoProximo().setNoPrevio(novoNo);
-        }else{
+        }else {
             novoNo.setNoPrevio(ultimoNo);
             ultimoNo = novoNo;
         }
-
         if(index == 0){
             primeiroNo = novoNo;
-        }else{
+        }else {
             novoNo.getNoPrevio().setNoProximo(novoNo);
         }
-
-        tamanhoLista ++;
-
+        tamanhoLista++;
     }
 
     public void remove(int index){
@@ -62,39 +48,40 @@ public class ListaDuplamenteEncadeada<T> {
                 primeiroNo.setNoPrevio(null);
             }
         }else{
-           NoDuplo<T> noAuxiliar = getNo(index);
-           noAuxiliar.getNoPrevio().setNoProximo(noAuxiliar.getNoProximo());
-           if(noAuxiliar != ultimoNo){
-               noAuxiliar.getNoProximo().setNoPrevio(noAuxiliar.getNoPrevio());
-           }else{
-               ultimoNo = noAuxiliar;
-           }
+            NoDuplo<T> noAuxiliar = getNo(index);
+            noAuxiliar.getNoPrevio().setNoProximo(noAuxiliar.getNoProximo());
+            if(noAuxiliar != ultimoNo){
+                noAuxiliar.getNoProximo().setNoPrevio(noAuxiliar.getNoPrevio());
+            }else{
+                ultimoNo = noAuxiliar;
+            }
         }
+        tamanhoLista--;
+    }
 
-        this.tamanhoLista --;
+    public T get(int index){
+        return getNo(index).getConteudo();
     }
 
     private NoDuplo<T> getNo(int index){
         NoDuplo<T> noAuxiliar = primeiroNo;
-
-        for (int i = 0; (i < index) && (noAuxiliar != null); i++){
+        for(int i = 0; (i < index) && (noAuxiliar != null); i++){
             noAuxiliar = noAuxiliar.getNoProximo();
         }
-
         return noAuxiliar;
     }
 
     public int size(){
-        return this.tamanhoLista;
+        return tamanhoLista;
     }
 
     @Override
     public String toString() {
         String strRetorno = "";
-        NoDuplo<T> noAxiliar = primeiroNo;
+        NoDuplo<T> noAuxiliar = primeiroNo;
         for(int i = 0; i < size(); i++){
-            strRetorno += "[No{conteudo=" + noAxiliar.getConteudo() + "}]--->";
-            noAxiliar = noAxiliar.getNoProximo();
+            strRetorno += "[No{conteudo=" + noAuxiliar.getConteudo() +"}]--->";
+            noAuxiliar = noAuxiliar.getNoProximo();
         }
         strRetorno += "null";
         return strRetorno;
